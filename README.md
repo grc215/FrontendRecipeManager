@@ -1,1 +1,1 @@
-# recipeManagerFrontend
+# RecipeManager
