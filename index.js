@@ -12,9 +12,7 @@ let divMain = document.createElement('div')
 let toggleBtn = document.createElement('button')
   toggleBtn.innerText = 'Add new recipe'
 divMain.append(toggleBtn)
-let h3 = document.createElement('h3')
-let image = document.createElement('img')
-let ingredientLi = document.createElement('li')
+
 
 let divBottom = document.createElement('div')
   divBottom.className = ('bottom-display')
@@ -32,10 +30,17 @@ fetch('http://localhost:3000/recipes')
 
     console.log(recipeArr)
     let Obj = recipeArr[0] 
+    //title recipe variables
+    let h3 = document.createElement('h3')
+    let image = document.createElement('img')
+    let ingredientLi = document.createElement('li')
+    let instructionsLi = document.createElement("p")
       h3.innerText = Obj.name
       image.src = Obj.image
       ingredientLi.innerText = Obj.ingredients
-      divMain.append(h3, image, ingredientLi)
+      instructionsLi.innerText = Obj.instructions
+
+      divMain.append(h3, image, ingredientLi, instructionsLi)
 
 
     recipeArr.forEach((recipeObj) => {
@@ -50,6 +55,7 @@ fetch('http://localhost:3000/recipes')
       h3.innerText = recipeObj.name
       image.src = recipeObj.image
       ingredientLi.innerText = recipeObj.ingredients
+      instructionsLi.innerText = recipeObj.instructions
     })
     })
   })
