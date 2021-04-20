@@ -1,5 +1,10 @@
 let body = document.querySelector('body')
 
+//like button definition
+let likeButton = document.createElement("button")
+    likeButton.innerText = "Like <3"
+    likeButton.classList.add("like-btn")
+
 let divheader = document.querySelector('div.add-recipe')
 let headerText = document.querySelector('.centered>p')
   headerText.innerText = 'Recipe Manager'
@@ -18,7 +23,7 @@ let divBottom = document.createElement('div')
   divBottom.className = ('bottom-display')
   body.append(divBottom)
 
-let recipeNewForm = document.querySelector('.add-recipe-form')
+//let recipeNewForm = document.querySelector('.add-recipe-form')
 
 fetch('http://localhost:3000/recipes')
   .then(res => res.json())
@@ -59,13 +64,51 @@ fetch('http://localhost:3000/recipes')
     })
     })
   })
+//
+  let recipeSubmit = document.querySelector(".add-recipe-form")
+  recipeSubmit.addEventListener("submit", function(e) {
+    e.preventDefault()
+    let newRecipeName = document.querySelector(".recipe-name-input").value
+    let newRecipeImg = document.querySelector(".recipe-img-input").value
+    let newRecipeIngr = document.querySelector(".recipe-ingredient-input").value
+    let newRecipeInstr = document.querySelector(".recipe-instructions-input").value
+    recipeSubmit.reset()
+    fetch("http://localhost:3000/recipes", {
+      method:"POST",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify({
+        "name": newRecipeName,
+        "image": newRecipeImg,
+        "ingredients": newRecipeIngr,
+        "instructions": newRecipeInstr,
+        "likes": 0
+      })
+    })
+    .then(res => res.JSON)
+    .then((newRecipe) => {
+      console.log(newRecipe)
+    })
+  })
+//like button event listener
+  likeButton.addEventListener("click", (e) => {
+    // UPDATE THE BACKEND: localhost:3000
+    fetch("http://localhost:3000/recipes", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        likes: recipe.likes + 1
+      })
+    })
+      .then(res => res.json())
+      .then((updatedRecipe) => {
+        // UPDATE THE DOM: <HTML>
+        recipeLikes.innerText = `${updatedRecipe.likes} Likes`
+        // UPDATE THE OBJECT IN MEMORY: {}
+        recipe.likes = updatedRecipe.likes
+      })
+  })
 
-recipeNewForm.addEventListener('submit', (evt) => {
-  evt.preventDefault()
-
-  let nameNew = evt.target['recipe-name'].value
-  let imageNew = evt.target['recipe-img'].value
-  let ingredientsNew = evt.target['recipe-ingredients'].value
-  let instructionsNew = evt.target['recipe-instructions'].value
-    console.log(nameNew, imageNew, ingredientsNew, instructionsNew)
-})
