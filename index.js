@@ -7,10 +7,11 @@ let headerText = document.querySelector('.centered>p')
 
 let divMain = document.createElement('div')
   divMain.className = ('main-display')
+  body.append(divMain)
+ 
 let toggleBtn = document.createElement('button')
-  toggleBtn.innerText = "Add new recipe"
-  body.append(divMain, toggleBtn)
-
+  toggleBtn.innerText = 'Add new recipe'
+divMain.append(toggleBtn)
 let h3 = document.createElement('h3')
 let image = document.createElement('img')
 let ingredientLi = document.createElement('li')
