@@ -14,9 +14,9 @@
         <img src='https://image.shutterstock.com/image-photo/mexican-taco-meat-beans-vegetables-260nw-692950210.jpg' alt='recipe banner'>
     </div> 
         <div>
-            <form class="add-more-ingedient-fields">
+            <!-- <form class="add-more-ingedient-fields">
                 <button>More Ingredients?</button> 
-            </form>
+            </form> -->
         </div>
           
         <div class="add-recipe">
@@ -30,6 +30,7 @@
                 <br>
         <!-- For stretch, try to add 3 inputs - quantity, measurement and ingredient -->
                 <p>Input Ingredient Name, Quantity, and Unit</p>
+
                 <input type="text" name="recipe-ingredients-name" value="" placeholder="Ingredient Name" class="recipe-ingredient-name-input1"/> 
                 <input type="text" name="recipe-ingredients-qty" value="" placeholder="Ingredient Qty" class="recipe-ingredient-qty-input1"/>
                 <select id = "unitList1" onchange = "dropDownUnit()" >  
@@ -45,11 +46,16 @@
                 <option> l </option>
                 <option> ml </option>
                 </select>  
+                <div class="add-more-ingedient-fields">
+                    <button>More Ingredients?</button> 
+                </div>
         <!-- For stretch, try to add 3 inputs - quantity, measurement and ingredient -->
                 <br>
+                <div>
                 <p>Input Recipe's Instructions</p>
                 <br>
                 <textarea type="text" name="recipe-instructions" value="" placeholder="Enter the Recipe's instructions" class="recipe-instructions-input"></textarea>
+                </div>
                 <button>Submit New Recipe</button>
             </form>
         </div>

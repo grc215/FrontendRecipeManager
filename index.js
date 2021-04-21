@@ -146,8 +146,10 @@ function objToMainHtml (recipeArr){
   //generates more ingredient lines
   let addMoreIngredientsButton = document.querySelector(".add-more-ingedient-fields")
 
-  addMoreIngredientsButton.addEventListener("submit", (e) => {
+  addMoreIngredientsButton.addEventListener("click", (e) => {
     e.preventDefault()
+   
+
     ingredientCount = ingredientCount + 1 //originally defined as 1 globally
 
     newNameField = document.createElement("input")
