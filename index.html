@@ -12,7 +12,13 @@
     <div class="centered">
         <p>centered</p>
         <img src='https://image.shutterstock.com/image-photo/mexican-taco-meat-beans-vegetables-260nw-692950210.jpg' alt='recipe banner'>
-    </div>    
+    </div> 
+        <div>
+            <form class="add-more-ingedient-fields">
+                <button>More Ingredients?</button> 
+            </form>
+        </div>
+          
         <div class="add-recipe">
                 <form class="add-recipe-form">
                 <h3></h3>
@@ -22,12 +28,11 @@
                 <p>Input the Recipe's image URL</p>
                 <input type="text" name="recipe-img" value="" placeholder="Enter the Recipe's image URL" class="recipe-img-input"/>
                 <br>
+        <!-- For stretch, try to add 3 inputs - quantity, measurement and ingredient -->
                 <p>Input Ingredient Name, Quantity, and Unit</p>
-                <br>
-                <input type="text" name="recipe-ingredients-name" value="" placeholder="Enter the ingredient name" class="recipe-ingredient-name-input"/> 
-                <br>
-                <input type="text" name="recipe-ingredients-qty" value="" placeholder="Enter the ingredient qty" class="recipe-ingredient-qty-input"/>
-                <select id = "unitList" onchange = "dropDownUnit()" >  
+                <input type="text" name="recipe-ingredients-name" value="" placeholder="Ingredient Name" class="recipe-ingredient-name-input1"/> 
+                <input type="text" name="recipe-ingredients-qty" value="" placeholder="Ingredient Qty" class="recipe-ingredient-qty-input1"/>
+                <select id = "unitList1" onchange = "dropDownUnit()" >  
                 <option> ---Choose unit--- </option>  
                 <option> each </option>
                 <option> lb </option> 

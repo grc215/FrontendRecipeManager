@@ -15,8 +15,10 @@
 	}
 } */
 
-
-
+.recipe-instructions-input{
+  width: 500px;
+  height: 50px;
+}
 
 div>img{
   display: block;
