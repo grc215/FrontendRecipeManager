@@ -1,15 +1,14 @@
 let body = document.querySelector('body')
 let ingredientCount = 1
 
-//like button definition
+//like button definition --------------Where is this going?
 let likeButton = document.createElement("button")
-    likeButton.innerText = "Like <3"
-    likeButton.classList.add("like-btn")
+  likeButton.innerText = "Like <3"
+  likeButton.classList.add("like-btn")
 
 let divheader = document.querySelector('div.add-recipe')
 let headerText = document.querySelector('.centered>p')
   headerText.innerText = 'Recipe Manager'
-
 
 let divMain = document.createElement('div')
   divMain.className = ('main-display')
@@ -23,46 +22,24 @@ let divBottom = document.createElement('div')
   divBottom.className = ('bottom-display')
   body.append(divBottom)
 
-//let recipeNewForm = document.querySelector('.add-recipe-form')
+  // Toggle Add new recipe form
+let toggleDiv = document.querySelector('.add-recipe-form')
+  toggleDiv.style.display = 'none'
+toggleBtn.addEventListener('click', ()=>{
+  if (toggleDiv.style.display === "none"){
+    toggleDiv.style.display = 'block'
+  }else{
+    toggleDiv.style.display = "none"
+  }
+})
+
 
 fetch('http://localhost:3000/recipes')
-  .then(res => res.json())
+  .then(resp => resp.json())
   .then((recipeArr) => {
-
-    recipeArr.sort(function (a, b) {
-      return b.likes - a.likes;
-    });
-
-    let Obj = recipeArr[0] 
-    //featured recipe variables
-    let h3 = document.createElement('h3')
-    let image = document.createElement('img')
-    let ingredientLi = document.createElement('li')
-    let instructionsLi = document.createElement("p")
-      h3.innerText = Obj.name
-      image.src = Obj.image
-      ingredientLi.innerText = Obj.ingredients
-      instructionsLi.innerText = Obj.instructions
-
-      divMain.append(h3, image, ingredientLi, instructionsLi)
-
-
-    recipeArr.forEach((recipeObj) => {
-      let nameLi = document.createElement('li')
-      nameLi.innerText = recipeObj.name
-
-      divBottom.append(nameLi)
-
-      //Event Listener to change the featured recipe 
-    nameLi.addEventListener("click", (evt) => {
-
-      h3.innerText = recipeObj.name
-      image.src = recipeObj.image
-      ingredientLi.innerText = recipeObj.ingredients
-      instructionsLi.innerText = recipeObj.instructions
-    })
-    })
+    objToMainHtml (recipeArr)
   })
+
 //Code for posting new recipes
   let recipeSubmit = document.querySelector(".add-recipe-form")
   recipeSubmit.addEventListener("submit", function(e) {
@@ -132,6 +109,39 @@ fetch('http://localhost:3000/recipes')
     ingredientUnit = unitList.options[unitList.selectedIndex].text
     //console.log(ingredientUnit)
     } 
+
+function objToMainHtml (recipeArr){
+  recipeArr.sort(function (a, b) {
+    return b.likes - a.likes;
+  });
+
+  let Obj = recipeArr[0] 
+  //title recipe variables
+  let h3 = document.createElement('h3')
+    h3.innerText = Obj.name
+  let image = document.createElement('img')
+    image.src = Obj.image
+  let ingredientLi = document.createElement('li')
+    ingredientLi.innerText = Obj.ingredients
+  let instructionsLi = document.createElement("p")
+    instructionsLi.innerText = Obj.instructions
+  divMain.append(h3, image, ingredientLi, instructionsLi)
+
+  recipeArr.forEach(recipeObj => {
+    let nameLi = document.createElement('li')
+      nameLi.innerText = recipeObj.name
+    divBottom.append(nameLi)
+
+    //Event Listener to change the featured recipe 
+    nameLi.addEventListener("click", () => {
+
+      h3.innerText = recipeObj.name
+      image.src = recipeObj.image
+      ingredientLi.innerText = recipeObj.ingredients
+      instructionsLi.innerText = recipeObj.instructions
+  })
+  })
+}
   
   //generates more ingredient lines
   let addMoreIngredientsButton = document.querySelector(".add-more-ingedient-fields")
@@ -161,4 +171,5 @@ fetch('http://localhost:3000/recipes')
     })
     recipeSubmit.append(newNameField, newQtyField, measurementOptions) //appends to the incorrect location!!!!!
   })
+
   
