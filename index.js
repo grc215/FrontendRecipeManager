@@ -17,6 +17,9 @@ divMain.append(toggleBtn)
 let divBottom = document.createElement('div')
   divBottom.className = ('bottom-display')
   body.append(divBottom)
+let allRecipeTitles = document.createElement("p")
+  allRecipeTitles.innerText = "All Recipes"
+  divBottom.prepend(allRecipeTitles)
 
   // Toggle Add new recipe form
 let toggleDiv = document.querySelector('.add-recipe-form')
@@ -24,6 +27,7 @@ let toggleDiv = document.querySelector('.add-recipe-form')
 toggleBtn.addEventListener('click', ()=>{
   if (toggleDiv.style.display === "none"){
     toggleDiv.style.display = 'block'
+    toggleBtn.remove()
   }else{
     toggleDiv.style.display = "none"
   }
@@ -53,11 +57,15 @@ fetch('http://localhost:3000/recipes')
     //   likeLi.className("likes")
     let image = document.createElement('img')
       image.src = Obj.image
-    let ingredientLi = document.createElement('li')
+    let ingredientTitle = document.createElement("p")
+      ingredientTitle.innerText = "Ingredients"
+    let ingredientLi = document.createElement('p')
       ingredientLi.innerText = Obj.ingredients
+    let instructionsTitle = document.createElement("p")
+      instructionsTitle.innerText = "Instructions"  
     let instructionsLi = document.createElement("p")
       instructionsLi.innerText = Obj.instructions
-    divMain.append(h3, likeButton, image, ingredientLi, instructionsLi)
+    divMain.append(h3, likeButton, image, ingredientTitle, ingredientLi, instructionsTitle, instructionsLi)
   
     
   
@@ -145,7 +153,7 @@ fetch('http://localhost:3000/recipes')
     })
     .then(res => res.JSON)
     .then((newRecipe) => {
-      console.log(newRecipe)
+      location.reload()
     })
   })
 //like button event listener
@@ -187,7 +195,7 @@ fetch('http://localhost:3000/recipes')
     })
     let createBreak = document.createElement("Br")
     let ingredientsDiv = document.querySelector(".inputIngredients")
-    ingredientsDiv.prepend(newNameField, newQtyField, measurementOptions, createBreak)
+    ingredientsDiv.append(newNameField, newQtyField, measurementOptions, createBreak)
     
   })
 
