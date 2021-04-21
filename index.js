@@ -1,10 +1,6 @@
 let body = document.querySelector('body')
 let ingredientCount = 1
 
-//like button definition --------------Where is this going?
-let likeButton = document.createElement("button")
-  likeButton.innerText = "Like <3"
-  likeButton.classList.add("like-btn")
 
 let divheader = document.querySelector('div.add-recipe')
 let headerText = document.querySelector('.centered>p')
@@ -40,6 +36,75 @@ fetch('http://localhost:3000/recipes')
     objToMainHtml (recipeArr)
   })
 
+  function objToMainHtml (recipeArr){
+    recipeArr.sort(function (a, b) {
+      return b.likes - a.likes;
+    });
+  
+    let Obj = recipeArr[0] 
+    //title recipe variables
+    let h3 = document.createElement('h3')
+      h3.innerText = Obj.name
+    let likeButton = document.createElement("button")
+      likeButton.innerText = "Like <3"
+      likeButton.classList.add("like-btn")
+    // let likeLi = document.createElement("li")
+    //   likeLi.innerText = ""
+    //   likeLi.className("likes")
+    let image = document.createElement('img')
+      image.src = Obj.image
+    let ingredientLi = document.createElement('li')
+      ingredientLi.innerText = Obj.ingredients
+    let instructionsLi = document.createElement("p")
+      instructionsLi.innerText = Obj.instructions
+    divMain.append(h3, likeButton, image, ingredientLi, instructionsLi)
+  
+    
+  
+    recipeArr.forEach(recipeObj => {
+      let nameLi = document.createElement('li')
+        nameLi.innerText = recipeObj.name
+      divBottom.append(nameLi)
+  
+      let likeButton = document.createElement("button")
+        likeButton.innerText = "Like <3"
+        likeButton.classList.add("like-btn")
+      console.log(likeButton)
+      likeButton.addEventListener("click", (e) => {
+        console.log(e)
+        let recipeLikes = recipeObj.likes
+      // let addLike =  recipeObj.
+      // UPDATE THE BACKEND: localhost:3000
+        fetch("http://localhost:3000/recipes", {
+          method: "PATCH",
+          headers: {
+          "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            "likes": recipeLikes + 1
+          })
+        }
+        .then(res => res.json())
+        .then((updatedRecipe) => {
+          console.log(updatedRecipe)
+          // UPDATE THE DOM: <HTML>
+          recipeLikes.innerText = `${updatedRecipe.likes} Likes`
+          // UPDATE THE OBJECT IN MEMORY: {}
+          recipeLikes = updatedRecipe.likes
+        })
+        )
+      })  
+      //Event Listener to change the featured recipe 
+      nameLi.addEventListener("click", () => {
+  
+        h3.innerText = recipeObj.name
+        image.src = recipeObj.image
+        ingredientLi.innerText = recipeObj.ingredients
+        instructionsLi.innerText = recipeObj.instructions
+    })
+    })
+  }
+
 //Code for posting new recipes
   let recipeSubmit = document.querySelector(".add-recipe-form")
   recipeSubmit.addEventListener("submit", function(e) {
@@ -61,6 +126,8 @@ fetch('http://localhost:3000/recipes')
         console.log(newRecipeIngrArr)
 
       }
+
+
     let newRecipeInstr = document.querySelector(".recipe-instructions-input").value
     recipeSubmit.reset()
     fetch("http://localhost:3000/recipes", {
@@ -81,27 +148,7 @@ fetch('http://localhost:3000/recipes')
       console.log(newRecipe)
     })
   })
-
 //like button event listener
-  likeButton.addEventListener("click", (e) => {
-    // UPDATE THE BACKEND: localhost:3000
-    fetch("http://localhost:3000/recipes", {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        likes: recipe.likes + 1
-      })
-    })
-      .then(res => res.json())
-      .then((updatedRecipe) => {
-        // UPDATE THE DOM: <HTML>
-        recipeLikes.innerText = `${updatedRecipe.likes} Likes`
-        // UPDATE THE OBJECT IN MEMORY: {}
-        recipe.likes = updatedRecipe.likes
-      })
-  })
 
   // dropdown menu function created with the help of https://www.javatpoint.com/how-to-create-dropdown-list-using-javascript
   function dropDownUnit() {  
@@ -109,39 +156,6 @@ fetch('http://localhost:3000/recipes')
     ingredientUnit = unitList.options[unitList.selectedIndex].text
     //console.log(ingredientUnit)
     } 
-
-function objToMainHtml (recipeArr){
-  recipeArr.sort(function (a, b) {
-    return b.likes - a.likes;
-  });
-
-  let Obj = recipeArr[0] 
-  //title recipe variables
-  let h3 = document.createElement('h3')
-    h3.innerText = Obj.name
-  let image = document.createElement('img')
-    image.src = Obj.image
-  let ingredientLi = document.createElement('li')
-    ingredientLi.innerText = Obj.ingredients
-  let instructionsLi = document.createElement("p")
-    instructionsLi.innerText = Obj.instructions
-  divMain.append(h3, image, ingredientLi, instructionsLi)
-
-  recipeArr.forEach(recipeObj => {
-    let nameLi = document.createElement('li')
-      nameLi.innerText = recipeObj.name
-    divBottom.append(nameLi)
-
-    //Event Listener to change the featured recipe 
-    nameLi.addEventListener("click", () => {
-
-      h3.innerText = recipeObj.name
-      image.src = recipeObj.image
-      ingredientLi.innerText = recipeObj.ingredients
-      instructionsLi.innerText = recipeObj.instructions
-  })
-  })
-}
   
   //generates more ingredient lines
   let addMoreIngredientsButton = document.querySelector(".add-more-ingedient-fields")
@@ -171,7 +185,10 @@ function objToMainHtml (recipeArr){
       option.innerText = opt
       measurementOptions.append(option)
     })
-    recipeSubmit.append(newNameField, newQtyField, measurementOptions) //appends to the incorrect location!!!!!
+    let createBreak = document.createElement("Br")
+    let ingredientsDiv = document.querySelector(".inputIngredients")
+    ingredientsDiv.prepend(newNameField, newQtyField, measurementOptions, createBreak)
+    
   })
 
   
