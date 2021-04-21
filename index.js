@@ -1,4 +1,5 @@
 let body = document.querySelector('body')
+let ingredientCount = 1
 
 //like button definition
 let likeButton = document.createElement("button")
@@ -33,7 +34,7 @@ fetch('http://localhost:3000/recipes')
     });
 
     let Obj = recipeArr[0] 
-    //title recipe variables
+    //featured recipe variables
     let h3 = document.createElement('h3')
     let image = document.createElement('img')
     let ingredientLi = document.createElement('li')
@@ -68,11 +69,13 @@ fetch('http://localhost:3000/recipes')
     e.preventDefault()
     let newRecipeName = document.querySelector(".recipe-name-input").value
     let newRecipeImg = document.querySelector(".recipe-img-input").value
-    let newRecipeIngrArr = []
-    let RecipeIngrName = document.querySelector(".recipe-ingredient-name-input").value
-    let RecipeIngrQty = document.querySelector(".recipe-ingredient-qty-input").value
-    let RecipeIngrUnit = ingredientUnit
-    newRecipeIngrArr.push(RecipeIngrName, RecipeIngrQty, RecipeIngrUnit)
+      //generating ingredient array, NEDD TO ADD A LOOP HERE TO COVER ADDITIONAL INPUTS!!!
+      let newRecipeIngrArr = []
+      let RecipeIngrName = document.querySelector(".recipe-ingredient-name-input1").value
+      let RecipeIngrQty = document.querySelector(".recipe-ingredient-qty-input1").value
+      let RecipeIngrUnit = ingredientUnit
+      let ingredient = `${RecipeIngrQty} ${RecipeIngrUnit} of ${RecipeIngrName}`
+      newRecipeIngrArr.push(ingredient)
     let newRecipeInstr = document.querySelector(".recipe-instructions-input").value
     recipeSubmit.reset()
     fetch("http://localhost:3000/recipes", {
@@ -83,7 +86,7 @@ fetch('http://localhost:3000/recipes')
       body: JSON.stringify({
         "name": newRecipeName,
         "image": newRecipeImg,
-        "ingredients": newRecipeIngrArr,
+        "ingredients":  newRecipeIngrArr,
         "instructions": newRecipeInstr,
         "likes": 0
       })
@@ -117,8 +120,37 @@ fetch('http://localhost:3000/recipes')
 
   // dropdown menu function created with the help of https://www.javatpoint.com/how-to-create-dropdown-list-using-javascript
   function dropDownUnit() {  
-    let unitlist = document.getElementById("unitList")  
-    ingredientUnit = unitList.options[unitlist.selectedIndex].text
+    let unitList = document.getElementById("unitList")  
+    ingredientUnit = unitList.options[unitList.selectedIndex].text
     //console.log(ingredientUnit)
     } 
+  
+  //generates more ingredient lines
+  let addMoreIngredientsButton = document.querySelector(".add-more-ingedient-fields")
+
+  addMoreIngredientsButton.addEventListener("submit", (e) => {
+    e.preventDefault()
+    ingredientCount = ingredientCount + 1 //originally defined as 1 globally
+
+    newNameField = document.createElement("input")
+    newNameField.className = `recipe-ingredient-name-input${ingredientCount}`
+    newNameField.placeholder = "Ingredient Qty"
+    recipeSubmit.append(newNameField)
+
+    newQtyField = document.createElement("input")
+    newQtyField.className = `recipe-ingredient-qty-input${ingredientCount}`
+    newQtyField.placeholder = "Ingredient Qty"
+    recipeSubmit.append(newQtyField)
+
+    let measurements = ["---Choose unit---", "each", "lb", "oz", "cup", "tbsp", "tsp", "g", "fl oz", "l", "ml"]
+    let measurementOptions = document.createElement("select")
+    measurementOptions.id = "unitlist" //will need to change this later
+    measurementOptions.onchange = "dropDownUnit()"
+    measurements.forEach((opt) => {
+      let option = document.createElement("option")
+      option.innerText = opt
+      measurementOptions.append(option)
+    })
+    recipeSubmit.append(newNameField, newQtyField, measurementOptions) //appends to the incorrect location!!!!!
+  })
   
