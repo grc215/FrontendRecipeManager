@@ -18,7 +18,6 @@ let toggleBtn = document.createElement('button')
   toggleBtn.innerText = 'Add new recipe'
 divMain.append(toggleBtn)
 
-
 let divBottom = document.createElement('div')
   divBottom.className = ('bottom-display')
   body.append(divBottom)
@@ -33,7 +32,6 @@ fetch('http://localhost:3000/recipes')
       return b.likes - a.likes;
     });
 
-    console.log(recipeArr)
     let Obj = recipeArr[0] 
     //title recipe variables
     let h3 = document.createElement('h3')
@@ -54,7 +52,7 @@ fetch('http://localhost:3000/recipes')
 
       divBottom.append(nameLi)
 
-      //Event Listener in the same level  
+      //Event Listener to change the featured recipe 
     nameLi.addEventListener("click", (evt) => {
 
       h3.innerText = recipeObj.name
@@ -64,13 +62,17 @@ fetch('http://localhost:3000/recipes')
     })
     })
   })
-//
+//Code for posting new recipes
   let recipeSubmit = document.querySelector(".add-recipe-form")
   recipeSubmit.addEventListener("submit", function(e) {
     e.preventDefault()
     let newRecipeName = document.querySelector(".recipe-name-input").value
     let newRecipeImg = document.querySelector(".recipe-img-input").value
-    let newRecipeIngr = document.querySelector(".recipe-ingredient-input").value
+    let newRecipeIngrArr = []
+    let RecipeIngrName = document.querySelector(".recipe-ingredient-name-input").value
+    let RecipeIngrQty = document.querySelector(".recipe-ingredient-qty-input").value
+    let RecipeIngrUnit = ingredientUnit
+    newRecipeIngrArr.push(RecipeIngrName, RecipeIngrQty, RecipeIngrUnit)
     let newRecipeInstr = document.querySelector(".recipe-instructions-input").value
     recipeSubmit.reset()
     fetch("http://localhost:3000/recipes", {
@@ -81,7 +83,7 @@ fetch('http://localhost:3000/recipes')
       body: JSON.stringify({
         "name": newRecipeName,
         "image": newRecipeImg,
-        "ingredients": newRecipeIngr,
+        "ingredients": newRecipeIngrArr,
         "instructions": newRecipeInstr,
         "likes": 0
       })
@@ -91,6 +93,7 @@ fetch('http://localhost:3000/recipes')
       console.log(newRecipe)
     })
   })
+
 //like button event listener
   likeButton.addEventListener("click", (e) => {
     // UPDATE THE BACKEND: localhost:3000
@@ -112,3 +115,10 @@ fetch('http://localhost:3000/recipes')
       })
   })
 
+  // dropdown menu function created with the help of https://www.javatpoint.com/how-to-create-dropdown-list-using-javascript
+  function dropDownUnit() {  
+    let unitlist = document.getElementById("unitList")  
+    ingredientUnit = unitList.options[unitlist.selectedIndex].text
+    //console.log(ingredientUnit)
+    } 
+  
