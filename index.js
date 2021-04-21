@@ -69,19 +69,21 @@ fetch('http://localhost:3000/recipes')
     e.preventDefault()
     let newRecipeName = document.querySelector(".recipe-name-input").value
     let newRecipeImg = document.querySelector(".recipe-img-input").value
-      //generating ingredient array, NEDD TO ADD A LOOP HERE TO COVER ADDITIONAL INPUTS!!!
+      //generating ingredient array
       let i = 1
       console.log(ingredientCount)
-      //for (i = 1; i < ingredientCount + 1; i++) {
-        let newRecipeIngrArr = []
+      let newRecipeIngrArr = []
+      for (i = 1; i < ingredientCount + 1; i++) {
         let RecipeIngrName = document.querySelector(`.recipe-ingredient-name-input${i}`).value
         let RecipeIngrQty = document.querySelector(`.recipe-ingredient-qty-input${i}`).value
-        let RecipeIngrUnit = ingredientUnit
-        let ingredient = `${RecipeIngrQty} ${RecipeIngrUnit} of ${RecipeIngrName}`
+        console.log(document.getElementById(`unitList${i}`) )
+        let ingrUnit = document.getElementById(`unitList${i}`)  
+        let RecipeIngrUnit = ingrUnit.options[ingrUnit.selectedIndex].text
+        let ingredient = ` ${RecipeIngrQty} ${RecipeIngrUnit} of ${RecipeIngrName}`
         newRecipeIngrArr.push(ingredient)
         console.log(newRecipeIngrArr)
 
-      //}
+      }
     let newRecipeInstr = document.querySelector(".recipe-instructions-input").value
     recipeSubmit.reset()
     fetch("http://localhost:3000/recipes", {
@@ -141,16 +143,16 @@ fetch('http://localhost:3000/recipes')
     newNameField = document.createElement("input")
     newNameField.className = `recipe-ingredient-name-input${ingredientCount}`
     newNameField.placeholder = "Ingredient Name"
-    recipeSubmit.append(newNameField)
+    //recipeSubmit.append(newNameField)
 
     newQtyField = document.createElement("input")
     newQtyField.className = `recipe-ingredient-qty-input${ingredientCount}`
     newQtyField.placeholder = "Ingredient Qty"
-    recipeSubmit.append(newQtyField)
+    //recipeSubmit.append(newQtyField)
 
     let measurements = ["---Choose unit---", "each", "lb", "oz", "cup", "tbsp", "tsp", "g", "fl oz", "l", "ml"]
     let measurementOptions = document.createElement("select")
-    measurementOptions.id = `unitlist${ingredientCount}` 
+    measurementOptions.id = `unitList${ingredientCount}` 
     measurementOptions.onchange = "dropDownUnit()"
     measurements.forEach((opt) => {
       let option = document.createElement("option")
