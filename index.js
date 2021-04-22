@@ -168,7 +168,7 @@ fetch('http://localhost:3000/recipes')
     .then((newRecipe) => {
       //console.log(newRecipe)
     })
-    //location.reload()
+    location.reload()
   })
 //like button event listener
   // dropdown menu function created with the help of https://www.javatpoint.com/how-to-create-dropdown-list-using-javascript
