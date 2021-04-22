@@ -168,7 +168,7 @@ fetch('http://localhost:3000/recipes')
     .then((newRecipe) => {
       //console.log(newRecipe)
     })
-    location.reload()
+    //location.reload()
   })
 //like button event listener
   // dropdown menu function created with the help of https://www.javatpoint.com/how-to-create-dropdown-list-using-javascript
@@ -199,7 +199,23 @@ fetch('http://localhost:3000/recipes')
       option.innerText = opt
       measurementOptions.append(option)
     })
+    console.log(measurementOptions.id)
     let createBreak = document.createElement("Br")
     let ingredientsDiv = document.querySelector(".inputIngredients")
     ingredientsDiv.append(newNameField, newQtyField, measurementOptions, createBreak)
+  })
+
+  //add less ingredients Event Listener
+  let addLessIngredientsButton = document.querySelector(".remove-ingedient-fields")
+  addLessIngredientsButton.addEventListener("click", (e) => {
+    e.preventDefault()
+    let measurementOptionsToRemove = document.querySelector(`#unitList${ingredientCount}`)
+    measurementOptionsToRemove.remove()
+    let newNewFieldToRemove = document.querySelector(`.recipe-ingredient-name-input${ingredientCount}`)
+    newNewFieldToRemove.remove()
+    let newQtyFieldToRemove = document.querySelector(`.recipe-ingredient-qty-input${ingredientCount}`)
+    newQtyFieldToRemove.remove()
+
+    ingredientCount = ingredientCount - 1
+    
   })
