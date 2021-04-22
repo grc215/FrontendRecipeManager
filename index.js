@@ -1,118 +1,114 @@
 let body = document.querySelector('body')
 let ingredientCount = 1
-
-
 let divheader = document.querySelector('div.add-recipe')
 let headerText = document.querySelector('.centered>p')
   headerText.innerText = 'Recipe Manager'
-
 let divMain = document.createElement('div')
   divMain.className = ('main-display')
   body.append(divMain)
- 
 let toggleBtn = document.createElement('button')
-  toggleBtn.innerText = 'Add new recipe'
+  toggleBtn.innerText = 'Add New Recipe'
 divMain.append(toggleBtn)
-
 let divBottom = document.createElement('div')
   divBottom.className = ('bottom-display')
   body.append(divBottom)
-let allRecipeTitles = document.createElement("p")
-  allRecipeTitles.innerText = "All Recipes"
-  divBottom.prepend(allRecipeTitles)
-
   // Toggle Add new recipe form
 let toggleDiv = document.querySelector('.add-recipe-form')
   toggleDiv.style.display = 'none'
 toggleBtn.addEventListener('click', ()=>{
   if (toggleDiv.style.display === "none"){
     toggleDiv.style.display = 'block'
-    toggleBtn.remove()
+    toggleBtn.innerText = 'Cancel New Recipe'
   }else{
     toggleDiv.style.display = "none"
+    toggleBtn.innerText = 'Add New Recipe'
   }
 })
-
-
 fetch('http://localhost:3000/recipes')
   .then(resp => resp.json())
   .then((recipeArr) => {
     objToMainHtml (recipeArr)
   })
-
   function objToMainHtml (recipeArr){
     recipeArr.sort(function (a, b) {
       return b.likes - a.likes;
     });
-  
-    let Obj = recipeArr[0] 
+    let Obj = recipeArr[0]
+    console.log(Obj)
     //title recipe variables
     let h3 = document.createElement('h3')
       h3.innerText = Obj.name
     let likeButton = document.createElement("button")
       likeButton.innerText = "Like <3"
-      likeButton.classList.add("like-btn")
-    // let likeLi = document.createElement("li")
-    //   likeLi.innerText = ""
-    //   likeLi.className("likes")
+      likeButton.classList.add(`like-btn-${Obj.id}`)
+    let numOfLikes = document.createElement("p")
+      numOfLikes.innerText = Obj.likes + " " + 'Likes'
+      numOfLikes.classList.add("likes")
     let image = document.createElement('img')
       image.src = Obj.image
-    let ingredientTitle = document.createElement("p")
-      ingredientTitle.innerText = "Ingredients"
-    let ingredientLi = document.createElement('p')
+    let ingredientLi = document.createElement('li')
       ingredientLi.innerText = Obj.ingredients
-    let instructionsTitle = document.createElement("p")
-      instructionsTitle.innerText = "Instructions"  
     let instructionsLi = document.createElement("p")
       instructionsLi.innerText = Obj.instructions
-    divMain.append(h3, likeButton, image, ingredientTitle, ingredientLi, instructionsTitle, instructionsLi)
-  
-    
-  
+    divMain.append(h3, numOfLikes, likeButton, image, ingredientLi, instructionsLi)
+    console.log(recipeArr[0].name)
+    console.log(h3.innerText)
+    likeButton.addEventListener("click", () => {
+      if(h3.innerText === recipeArr[0].name) {
+      fetch(`http://localhost:3000/recipes/${Obj.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          likes: Obj.likes + 1
+        }),
+      })
+      .then(resp => resp.json())
+      .then((updatedObj) => {
+        // console.log(updatedMainObj)
+        numOfLikes.innerText = `${updatedObj.likes} Likes`
+        // Update local memory
+        Obj.likes = updatedObj.likes
+        });
+      }
+    })
     recipeArr.forEach(recipeObj => {
       let nameLi = document.createElement('li')
-        nameLi.innerText = recipeObj.name
+        nameLi.innerText = recipeObj.name + " " + "-" + " " + recipeObj.likes + " " + "Likes"
+        nameLi.classList = `li-${recipeObj.id}`
       divBottom.append(nameLi)
-  
-      let likeButton = document.createElement("button")
-        likeButton.innerText = "Like <3"
-        likeButton.classList.add("like-btn")
-      console.log(likeButton)
-      likeButton.addEventListener("click", (e) => {
-        console.log(e)
-        let recipeLikes = recipeObj.likes
-      // let addLike =  recipeObj.
-      // UPDATE THE BACKEND: localhost:3000
-        fetch("http://localhost:3000/recipes", {
-          method: "PATCH",
-          headers: {
-          "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            "likes": recipeLikes + 1
-          })
-        }
-        .then(res => res.json())
-        .then((updatedRecipe) => {
-          console.log(updatedRecipe)
-          // UPDATE THE DOM: <HTML>
-          recipeLikes.innerText = `${updatedRecipe.likes} Likes`
-          // UPDATE THE OBJECT IN MEMORY: {}
-          recipeLikes = updatedRecipe.likes
-        })
-        )
-      })  
       //Event Listener to change the featured recipe 
       nameLi.addEventListener("click", () => {
-  
         h3.innerText = recipeObj.name
         image.src = recipeObj.image
         ingredientLi.innerText = recipeObj.ingredients
         instructionsLi.innerText = recipeObj.instructions
-    })
-    })
+        numOfLikes.innerText = recipeObj.likes + " " + 'Likes'
+           likeButton.addEventListener("click", () => {
+           if(h3.innerText !== recipeArr[0].name) {
+            fetch(`http://localhost:3000/recipes/${recipeObj.id}`, {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                likes: recipeObj.likes + 1
+              }),
+            })
+            .then(resp => resp.json())
+            .then((updatedRecipeObj) => {
+              // console.log(updatedMainObj)
+              numOfLikes.innerText = `${updatedRecipeObj.likes} Likes`
+              // Update local memory
+              recipeObj.likes = updatedRecipeObj.likes
+              nameLi.innerText = recipeObj.name + " " + "-" + " " + recipeObj.likes + " " + "Likes"
+            });
+          }
+        })
+      })
+  })
   }
-
 //Code for posting new recipes
   let recipeSubmit = document.querySelector(".add-recipe-form")
   recipeSubmit.addEventListener("submit", function(e) {
@@ -132,10 +128,7 @@ fetch('http://localhost:3000/recipes')
         let ingredient = ` ${RecipeIngrQty} ${RecipeIngrUnit} of ${RecipeIngrName}`
         newRecipeIngrArr.push(ingredient)
         console.log(newRecipeIngrArr)
-
       }
-
-
     let newRecipeInstr = document.querySelector(".recipe-instructions-input").value
     recipeSubmit.reset()
     fetch("http://localhost:3000/recipes", {
@@ -153,37 +146,29 @@ fetch('http://localhost:3000/recipes')
     })
     .then(res => res.JSON)
     .then((newRecipe) => {
-      location.reload()
+      console.log(newRecipe)
     })
   })
 //like button event listener
-
   // dropdown menu function created with the help of https://www.javatpoint.com/how-to-create-dropdown-list-using-javascript
   function dropDownUnit() {  
     let unitList = document.getElementById(`unitList${ingredientCount}`)  
     ingredientUnit = unitList.options[unitList.selectedIndex].text
     //console.log(ingredientUnit)
     } 
-  
   //generates more ingredient lines
   let addMoreIngredientsButton = document.querySelector(".add-more-ingedient-fields")
-
   addMoreIngredientsButton.addEventListener("click", (e) => {
     e.preventDefault()
-   
-
     ingredientCount = ingredientCount + 1 //originally defined as 1 globally
-
     newNameField = document.createElement("input")
     newNameField.className = `recipe-ingredient-name-input${ingredientCount}`
     newNameField.placeholder = "Ingredient Name"
     //recipeSubmit.append(newNameField)
-
     newQtyField = document.createElement("input")
     newQtyField.className = `recipe-ingredient-qty-input${ingredientCount}`
     newQtyField.placeholder = "Ingredient Qty"
     //recipeSubmit.append(newQtyField)
-
     let measurements = ["---Choose unit---", "each", "lb", "oz", "cup", "tbsp", "tsp", "g", "fl oz", "l", "ml"]
     let measurementOptions = document.createElement("select")
     measurementOptions.id = `unitList${ingredientCount}` 
@@ -195,8 +180,5 @@ fetch('http://localhost:3000/recipes')
     })
     let createBreak = document.createElement("Br")
     let ingredientsDiv = document.querySelector(".inputIngredients")
-    ingredientsDiv.append(newNameField, newQtyField, measurementOptions, createBreak)
-    
+    ingredientsDiv.prepend(newNameField, newQtyField, measurementOptions, createBreak)
   })
-
-  
