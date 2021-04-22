@@ -211,13 +211,14 @@ fetch('http://localhost:3000/recipes')
   addLessIngredientsButton.addEventListener("click", (e) => {
     e.preventDefault()
     let measurementOptionsToRemove = document.querySelector(`#unitList${ingredientCount}`)
-      measurementOptionsToRemove.remove()
     let newNewFieldToRemove = document.querySelector(`.recipe-ingredient-name-input${ingredientCount}`)
-      newNewFieldToRemove.remove()
     let newQtyFieldToRemove = document.querySelector(`.recipe-ingredient-qty-input${ingredientCount}`)
-      newQtyFieldToRemove.remove()
     let newBreakToRemove = document.querySelector(`.break${ingredientCount}`)
+    if (newNewFieldToRemove.className !== "recipe-ingredient-name-input1"){
+      measurementOptionsToRemove.remove()
+      newNewFieldToRemove.remove()
+      newQtyFieldToRemove.remove()
       newBreakToRemove.remove()
     ingredientCount = ingredientCount - 1
-    
+    }
   })
