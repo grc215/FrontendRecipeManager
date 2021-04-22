@@ -1,23 +1,25 @@
-/* body {
-	background: linear-gradient(-45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB);
-	background-size: 400% 400%;
-	animation: gradient 60s ease infinite;
+.background {
+  background: rgba(255, 255, 255, 0.3);
 }
-@keyframes gradient {
-	0% {
-		background-position: 0% 50%;
-	}
-	50% {
-		background-position: 100% 50%;
-	}
-	100% {
-		background-position: 0% 50%;
-	}
-}  */
+
+html {
+  background: url(https://images.unsplash.com/photo-1495195129352-aeb325a55b65?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1955&q=80) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
 
 .recipe-instructions-input{
   width: 500px;
   height: 50px;
+}
+
+div.add-more-ingedient-fields{
+  width: 123.45px;
+}
+div.remove-ingedient-fields{
+  width: 121.23px;
 }
 
 div>img{
@@ -28,12 +30,9 @@ div>img{
   height: 200px;
 }
 .centered>p {
-  position: absolute;
-  top: 4%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 35px;
-  color: #B94C01;
+  text-align: center;
+  font-size: 48px;
+  color: #000000;
   text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
 }
 
@@ -57,6 +56,7 @@ h4{
 }
 .main-display{
   text-align: center;
+  background: rgba(255, 255, 255, 0.3);
  }
 
 .main-display>h3{
@@ -79,7 +79,6 @@ h4{
  }
 .add-recipe-form{
   outline: 2px solid black;
-  padding: 2px 10px 20px 20px;
 }
 .recipe-instructions-input{
   margin: 0px 10px 10px 0px;

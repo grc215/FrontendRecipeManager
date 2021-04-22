@@ -201,6 +201,7 @@ fetch('http://localhost:3000/recipes')
     })
     console.log(measurementOptions.id)
     let createBreak = document.createElement("Br")
+    createBreak.className = `break${ingredientCount}`
     let ingredientsDiv = document.querySelector(".inputIngredients")
     ingredientsDiv.append(newNameField, newQtyField, measurementOptions, createBreak)
   })
@@ -210,12 +211,13 @@ fetch('http://localhost:3000/recipes')
   addLessIngredientsButton.addEventListener("click", (e) => {
     e.preventDefault()
     let measurementOptionsToRemove = document.querySelector(`#unitList${ingredientCount}`)
-    measurementOptionsToRemove.remove()
+      measurementOptionsToRemove.remove()
     let newNewFieldToRemove = document.querySelector(`.recipe-ingredient-name-input${ingredientCount}`)
-    newNewFieldToRemove.remove()
+      newNewFieldToRemove.remove()
     let newQtyFieldToRemove = document.querySelector(`.recipe-ingredient-qty-input${ingredientCount}`)
-    newQtyFieldToRemove.remove()
-
+      newQtyFieldToRemove.remove()
+    let newBreakToRemove = document.querySelector(`.break${ingredientCount}`)
+      newBreakToRemove.remove()
     ingredientCount = ingredientCount - 1
     
   })
