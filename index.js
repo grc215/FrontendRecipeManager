@@ -1,4 +1,5 @@
 let body = document.querySelector('body')
+let likeInteger
 let ingredientCount = 1
 let divheader = document.querySelector('div.add-recipe')
 let headerText = document.querySelector('.centered>p')
@@ -34,78 +35,97 @@ fetch('http://localhost:3000/recipes')
       return b.likes - a.likes;
     });
     let Obj = recipeArr[0]
-    console.log(Obj)
+    //console.log(Obj)
     //title recipe variables
+    let ingredientTitle = document.createElement("h4")
+      ingredientTitle.innerText = "Ingredients"
+    let instructionsTitle = document.createElement("h4")
+      instructionsTitle.innerText = "Instructions"
+    let recipeBankTitle = document.createElement("h4")
+      recipeBankTitle.innerText = "Recipe Bank"
     let h3 = document.createElement('h3')
       h3.innerText = Obj.name
+    let objId= Obj.id
     let likeButton = document.createElement("button")
       likeButton.innerText = "Like <3"
       likeButton.classList.add(`like-btn-${Obj.id}`)
     let numOfLikes = document.createElement("p")
       numOfLikes.innerText = Obj.likes + " " + 'Likes'
       numOfLikes.classList.add("likes")
+    likeInteger = Obj.likes
     let image = document.createElement('img')
       image.src = Obj.image
     let ingredientLi = document.createElement('li')
       ingredientLi.innerText = Obj.ingredients
     let instructionsLi = document.createElement("p")
       instructionsLi.innerText = Obj.instructions
-    divMain.append(h3, numOfLikes, likeButton, image, ingredientLi, instructionsLi)
-    console.log(recipeArr[0].name)
-    console.log(h3.innerText)
+    divMain.append(h3, numOfLikes, likeButton, image, ingredientTitle, ingredientLi, instructionsTitle, instructionsLi, recipeBankTitle)
+    //console.log(recipeArr[0].name)
+    //console.log(h3.innerText)
+
     likeButton.addEventListener("click", () => {
-      if(h3.innerText === recipeArr[0].name) {
-      fetch(`http://localhost:3000/recipes/${Obj.id}`, {
+//console.log(likeInteger)
+
+      fetch(`http://localhost:3000/recipes/${objId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          likes: Obj.likes + 1
+          likes: likeInteger + 1
         }),
       })
       .then(resp => resp.json())
       .then((updatedObj) => {
         // console.log(updatedMainObj)
-        numOfLikes.innerText = `${updatedObj.likes} Likes`
+        likeInteger = updatedObj.likes
+        numOfLikes.innerText = `${likeInteger} Likes`
         // Update local memory
-        Obj.likes = updatedObj.likes
+        //likeInteger = likeInteger + 1
+        document.querySelector(`.li${objId}`).innerText = updatedObj.name + " " + "-" + " " + likeInteger + " " + "Likes"
         });
-      }
     })
     recipeArr.forEach(recipeObj => {
       let nameLi = document.createElement('li')
+      //let updatedRecipe = 
         nameLi.innerText = recipeObj.name + " " + "-" + " " + recipeObj.likes + " " + "Likes"
-        nameLi.classList = `li-${recipeObj.id}`
+        nameLi.classList = `li${recipeObj.id}`
       divBottom.append(nameLi)
       //Event Listener to change the featured recipe 
       nameLi.addEventListener("click", () => {
-        h3.innerText = recipeObj.name
-        image.src = recipeObj.image
-        ingredientLi.innerText = recipeObj.ingredients
-        instructionsLi.innerText = recipeObj.instructions
-        numOfLikes.innerText = recipeObj.likes + " " + 'Likes'
-           likeButton.addEventListener("click", () => {
-           if(h3.innerText !== recipeArr[0].name) {
-            fetch(`http://localhost:3000/recipes/${recipeObj.id}`, {
-              method: "PATCH",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                likes: recipeObj.likes + 1
-              }),
-            })
-            .then(resp => resp.json())
-            .then((updatedRecipeObj) => {
-              // console.log(updatedMainObj)
-              numOfLikes.innerText = `${updatedRecipeObj.likes} Likes`
-              // Update local memory
-              recipeObj.likes = updatedRecipeObj.likes
-              nameLi.innerText = recipeObj.name + " " + "-" + " " + recipeObj.likes + " " + "Likes"
-            });
-          }
+        objId = recipeObj.id
+        fetch(`http://localhost:3000/recipes/${objId}`)
+        .then(resp => resp.json())
+        .then((recipeObj) => {
+          h3.innerText = recipeObj.name
+          image.src = recipeObj.image
+          ingredientLi.innerText = recipeObj.ingredients
+          instructionsLi.innerText = recipeObj.instructions
+          numOfLikes.innerText = recipeObj.likes + " " + 'Likes'
+          likeInteger = recipeObj.likes
+          //console.log(recipeObj.likes)
         })
+           //likeButton.addEventListener("click", () => {
+           //if(h3.innerText !== recipeArr[0].name) {
+            //fetch(`http://localhost:3000/recipes/${recipeObj.id}`, {
+              //method: "PATCH",
+              //headers: {
+                //"Content-Type": "application/json",
+              //},
+              //body: JSON.stringify({
+                //likes: recipeObj.likes + 1
+              //}),
+            //})
+            //.then(resp => resp.json())
+            //.then((updatedRecipeObj) => {
+              //// console.log(updatedMainObj)
+              //numOfLikes.innerText = `${updatedRecipeObj.likes} Likes`
+              //// Update local memory
+              //recipeObj.likes = updatedRecipeObj.likes
+              //nameLi.innerText = recipeObj.name + " " + "-" + " " + recipeObj.likes + " " + "Likes"
+            //});
+          //}
+        //})
       })
   })
   }
@@ -117,17 +137,17 @@ fetch('http://localhost:3000/recipes')
     let newRecipeImg = document.querySelector(".recipe-img-input").value
       //generating ingredient array
       let i = 1
-      console.log(ingredientCount)
+      //console.log(ingredientCount)
       let newRecipeIngrArr = []
       for (i = 1; i < ingredientCount + 1; i++) {
         let RecipeIngrName = document.querySelector(`.recipe-ingredient-name-input${i}`).value
         let RecipeIngrQty = document.querySelector(`.recipe-ingredient-qty-input${i}`).value
-        console.log(document.getElementById(`unitList${i}`) )
+        //console.log(document.getElementById(`unitList${i}`) )
         let ingrUnit = document.getElementById(`unitList${i}`)  
         let RecipeIngrUnit = ingrUnit.options[ingrUnit.selectedIndex].text
         let ingredient = ` ${RecipeIngrQty} ${RecipeIngrUnit} of ${RecipeIngrName}`
         newRecipeIngrArr.push(ingredient)
-        console.log(newRecipeIngrArr)
+        //console.log(newRecipeIngrArr)
       }
     let newRecipeInstr = document.querySelector(".recipe-instructions-input").value
     recipeSubmit.reset()
@@ -146,8 +166,9 @@ fetch('http://localhost:3000/recipes')
     })
     .then(res => res.JSON)
     .then((newRecipe) => {
-      console.log(newRecipe)
+      //console.log(newRecipe)
     })
+    location.reload()
   })
 //like button event listener
   // dropdown menu function created with the help of https://www.javatpoint.com/how-to-create-dropdown-list-using-javascript
@@ -180,5 +201,5 @@ fetch('http://localhost:3000/recipes')
     })
     let createBreak = document.createElement("Br")
     let ingredientsDiv = document.querySelector(".inputIngredients")
-    ingredientsDiv.prepend(newNameField, newQtyField, measurementOptions, createBreak)
+    ingredientsDiv.append(newNameField, newQtyField, measurementOptions, createBreak)
   })
