@@ -48,7 +48,7 @@ fetch('http://localhost:3000/recipes')
     let objId= Obj.id
     let likeButton = document.createElement("button")
       likeButton.innerText = "Like <3"
-      likeButton.classList.add(`like-btn-${Obj.id}`)
+      likeButton.classList.add(`like-btn-1`)
     let numOfLikes = document.createElement("p")
       numOfLikes.innerText = Obj.likes + " " + 'Likes'
       numOfLikes.classList.add("likes")
