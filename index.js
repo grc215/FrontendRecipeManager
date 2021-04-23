@@ -205,7 +205,7 @@ fetch('http://localhost:3000/recipes')
     let ingredientsDiv = document.querySelector(".inputIngredients")
     ingredientsDiv.append(newNameField, newQtyField, measurementOptions, createBreak)
   })
-
+console.log(3)
   //add less ingredients Event Listener
   let addLessIngredientsButton = document.querySelector(".remove-ingedient-fields")
   addLessIngredientsButton.addEventListener("click", (e) => {
